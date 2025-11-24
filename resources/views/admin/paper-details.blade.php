@@ -11,7 +11,7 @@
            <div id="page-wrapper">
             <div id="page-inner">
                 <div class="row">
-                    <div class="col-md-5">                        
+                    <div class="col-md-5">
                         <h1 class="page-head-line">Paper Details</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
@@ -32,23 +32,23 @@
                                         <table class="table table-sm table-condensed table-bordered">
                                             <tr>
                                                 <th class="text-right">Roll No</th>
-                                                <td>{!!$paper->roll!!}</th>
+                                                <td>{!!$paper->roll!!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-right">Regn No</th>
-                                                <td>{!!$paper->regn!!}</th>
+                                                <td>{!!$paper->regn!!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-right">Student Name</th>
-                                                <td>{!!$paper->student_name!!}</th>
+                                                <td>{!!$paper->student_name!!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-right">School</th>
-                                                <td>{!!$paper->school_name!!}</th>
+                                                <td>{!!$paper->school_name!!}</td>
                                             </tr>
                                             <tr>
                                                 <th class="text-right">Program Name</th>
-                                                <td>{!!$paper->program_name!!}</th>
+                                                <td>{!!$paper->program_name!!}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -56,19 +56,15 @@
                                         <table class="table table-sm table-condensed table-bordered">
                                             <tr>
                                                 <th class="text-right">Subject</th>
-                                                <td>{!!$paper->subject_name!!}</th>
+                                                <td>{!!$paper->subject_name!!}</td>
                                             </tr>
-                                            <tr style="height: 95px;">
+                                            <tr style="height: 125px;">
                                                 <th class="text-right">Title:</th>
-                                                <td>{!!$paper->paper_title!!}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Review:</td>
-                                                <td></td>
+                                                <td>{!!$paper->paper_title!!}</td>
                                             </tr>
                                         </table>
                                     </div>
-                                </td>
+                                </div>
 
                                 <div class="row">
 
@@ -134,15 +130,19 @@
                                                     <td>{!!$row->reviewer_name!!}</td>
                                                     <td class="text-center">{!!$row->created_on!!}</td>
                                                     <td class="text-center">
-                                                    @if($row->review_status==0)
-                                                        <b class="label label-danger"> Not Reviewed </b>
-                                                    @else
-                                                        <b class="label label-success"> Reviewed </b>
+                                                    @if($row->review_status==-1)
+                                                        <b class="label label-danger"> Rejected </b>
+                                                    @elseif($row->review_status==0)
+                                                        <b class="label label-warning"> Pending </b>
+                                                    @elseif($row->review_status==1)
+                                                        <b class="label label-info"> Accept with Modified </b>
+                                                    @elseif($row->review_status==2)
+                                                        <b class="label label-success"> Accepted </b>
                                                     @endif
                                                     </td>
                                                     <td></td>
                                                     <td class="text-center">
-                                                        <A href="" class="btn btn-xs btn-info"> <i class="fa fa-bars"></i> Details </A>
+                                                        <A href="{{asset('admin/paper-review-status?review_id='.$row->review_id)}}" class="btn btn-xs btn-info"> <i class="fa fa-bars"></i> Details </A>
                                                     </td>
                                                 </tr>
                                             @endforeach                                            

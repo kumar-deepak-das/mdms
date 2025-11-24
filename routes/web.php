@@ -70,22 +70,24 @@ Route::prefix('school/')->group(function(){
 Route::prefix('reviewer/')->group(function(){
 
 	Route::get('logout', [ReviewerController::class, 'logout']);	
-	Route::get('login', [ReviewerController::class, 'login']);
-	Route::post('login', [ReviewerController::class, 'validateLogin']);
+	// Route::get('login', [ReviewerController::class, 'login']);
+	// Route::post('login', [ReviewerController::class, 'validateLogin']);
 
 	Route::get('/', [ReviewerController::class, 'dashboard'])->middleware('authenticatereviewer');
 	Route::get('dashboard', [ReviewerController::class, 'dashboard'])->middleware('authenticatereviewer');
 	
 	Route::get('paper-list', [ReviewerController::class, 'paperList'])->middleware('authenticatereviewer');
-	Route::post('paper-update', [ReviewerController::class, 'paperUpdateNow'])->middleware('authenticatereviewer');
+	// Route::post('paper-update', [ReviewerController::class, 'paperUpdateNow'])->middleware('authenticatereviewer');
+
 	Route::get('paper-details', [ReviewerController::class, 'paperDetails'])->middleware('authenticatereviewer');
+	Route::post('paper-details', [ReviewerController::class, 'paperUpdate'])->middleware('authenticatereviewer');
 	
 });
 
 Route::prefix('admin/')->group(function(){
 	Route::get('logout', [AdminController::class, 'logout']);	
-	Route::get('login', [AdminController::class, 'login']);
-	Route::post('login', [AdminController::class, 'validateLogin']);
+	// Route::get('login', [AdminController::class, 'login']);
+	// Route::post('login', [AdminController::class, 'validateLogin']);
 
 	Route::get('/', [AdminController::class, 'dashboard'])->middleware('authenticateadmin');
 	Route::get('dashboard', [AdminController::class, 'dashboard'])->middleware('authenticateadmin');
@@ -111,5 +113,7 @@ Route::prefix('admin/')->group(function(){
 	Route::post('paper-update', [AdminController::class, 'paperUpdateNow'])->middleware('authenticateadmin');
 	Route::get('paper-details', [AdminController::class, 'paperDetails'])->middleware('authenticateadmin');
 	Route::post('paper-reviewer-assign', [AdminController::class, 'paperReviewerAssign'])->middleware('authenticateadmin');
+
+	Route::get('paper-review-status', [AdminController::class, 'paperReviewStatus'])->middleware('authenticateadmin');
 	
 });

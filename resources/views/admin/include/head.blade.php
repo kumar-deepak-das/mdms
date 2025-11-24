@@ -27,3 +27,7 @@
 
    <link href="{{ asset('public/assets/admin/css/progress-bar.css')}}" rel="stylesheet">
 
+   <style>
+        .no-resize{ resize: none; }
+   </style>
+

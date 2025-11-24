@@ -256,12 +256,13 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Phone No is already registered as a Reviewer')->withInput();
 
         $password = rand(111111,999999);
+
         DB::table('reviewers')->insert([            
             'reviewer_name'     => $request->reviewer_name,
             'reviewer_email'    => $request->reviewer_email,
             'reviewer_phone'    => $request->reviewer_phone,
             'reviewer_address'  => $request->reviewer_address,
-            'reviewer_password' => md5($password),
+            'reviewer_password' => $password, //md5($password),
             'reviewer_status'   => 1,
             'created_by'        => $request->session()->get('adminId'),
             'updated_by'        => $request->session()->get('adminId'),
@@ -289,7 +290,24 @@ class AdminController extends Controller
         if(count($reviewers)==0)
             return redirect()->back()->with('error', 'Invalid Reviewer Details')->withInput();
 
-        return view('admin.reviewer-details', ['reviewer' => $reviewers[0]]);
+
+        if($request->has('session') && !empty($request->session))
+            $session = $request->session;
+        else
+            $session = config('app.sessions')[0];
+        
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('programs', 'papers.program_id', 'programs.program_id')
+            ->where('papers.session', $session)
+            ->where('reviews.reviewer_id', $reviewers[0]->reviewer_id)
+            ->orderBy('reviews.review_id','DESC')->get();
+
+
+        return view('admin.reviewer-details', ['reviewer' => $reviewers[0], 'papers' => $reviews, 'session' => $session]);
     }
     
     public function reviewerUpdate(Request $request)
@@ -339,6 +357,7 @@ class AdminController extends Controller
     public function paperAddNow(Request $request)
     {
         $request->validate([
+            'title'          => 'required',
             'roll'          => 'required',
             'regn'          => 'required',
             'student_name'  => 'required',
@@ -380,6 +399,8 @@ class AdminController extends Controller
             $other_doc=null;
 
         DB::table('papers')->insert([
+            'session'       => $request->session,
+            'paper_title'   => $request->title, 
             'roll'          => $request->roll, 
             'regn'          => $request->regn, 
             'student_name'  => $request->student_name, 
@@ -400,10 +421,16 @@ class AdminController extends Controller
 
     public function paperList(Request $request)
     {
+        if($request->has('session') && !empty($request->session))
+            $session = $request->session;
+        else
+            $session = config('app.sessions')[0];
+
         $papers = DB::table('papers')
             ->join('schools', 'schools.school_id', 'papers.school_id')
             ->join('programs', 'programs.program_id', 'papers.program_id')
             ->join('subjects', 'subjects.subject_id', 'papers.subject_id')
+            ->where('papers.session', $session)
             ->orderBy('paper_id','DESC')->get();
 
 
@@ -412,27 +439,27 @@ class AdminController extends Controller
 
         // echo '<pre>';print_r($reviewers); exit;
 
-        return view('admin.paper-list', ['papers' => $papers, 'reviewers' => $reviewers]);
+        return view('admin.paper-list', ['papers' => $papers, 'reviewers' => $reviewers, 'session' => $session]);
     }
 
     public function paperDetails(Request $request)
     {
         $request->validate([
-            'id'    => 'required',
+            'paper_id'    => 'required',
         ]);
 
         $papers = DB::table('papers')
             ->join('schools', 'schools.school_id', 'papers.school_id')
             ->join('programs', 'programs.program_id', 'papers.program_id')
             ->join('subjects', 'subjects.subject_id', 'papers.subject_id')
-            ->where('paper_id',$request->id)->get();
+            ->where('paper_id',$request->paper_id)->get();
 
         $reviewers = DB::table('reviewers')
             ->orderBy('reviewer_name','ASC')->get();
 
         $reviews = DB::table('reviews')
             ->join('reviewers','reviews.reviewer_id','reviewers.reviewer_id')
-            ->where('paper_id',$request->id)->get();
+            ->where('paper_id',$request->paper_id)->get();
             
         // echo '<pre>';print_r($reviews); exit;
 
@@ -446,18 +473,92 @@ class AdminController extends Controller
             'reviewer'  => 'required',
         ]);
 
+        $reviewers = DB::table('reviewers')->where('reviewer_id',$request->reviewer)->get();
+
+        if(count($reviewers)!=1)
+            return Redirect::back()->with('error','Invalid Reviewr Details');
+
+        $reviewer = $reviewers[0];
+
+        $review_note = [
+                "accept"        => "",
+                "rem"           => "",
+                "original"      => "",
+                "reliable"      => "",
+                "design"        => "",
+                "techniques"    => "",
+                "results"       => "",
+                "interpretation"=> "",
+                "publication"   => "",
+                "statistical"   => "",
+                "conclusions"   => "",
+                "references"    => "",
+                "figures"       => "",
+                "repetition"    => "",
+                "comment"       => "",
+            ];
+
         $papers = DB::table('reviews')
             ->insert([
                 'review_id' => null,
                 'paper_id' => $request->paper,
                 'reviewer_id' => $request->reviewer,
                 'review_status' => 0,
-                'review_note' => null,
+                'review_note' => json_encode($review_note),
                 'created_by'    => '0', 
                 'updated_by'    => '0',
             ]);
 
+
+        $mailData = [
+            'subject' => "Request to Review Thesis Paper – Login Credentials Provided",
+            'name' => $reviewer->reviewer_name,
+            'body' => [
+                "We hope you are doing well.<br>
+                We kindly request you to review the thesis paper through our Thesis Review Portal.",
+
+                "Your login credentials for accessing the portal are given below:",
+
+                "<strong>Portal Link:</strong> $_ENV[APP_URL]<br>
+                <strong>User ID:</strong> $reviewer->reviewer_email<br/>
+                <strong>Password:</strong> $reviewer->reviewer_password",
+                "Please log in to the portal and review the assigned thesis paper at your earliest convenience.",
+                "After logging in, you will be able to view the document, provide comments, and submit your final review directly through the system.",
+                "We sincerely appreciate your valuable time and expertise in supporting the review process.",
+            ],
+        ];
+
+
+        Mail::to($reviewer->reviewer_email)->send(new MyMail($mailData,'reviewerInvitaionMail'));
+
         return Redirect::back()->with('success', 'Reviewer Asigned Successfully');
+    } 
+
+    public function paperReviewStatus(Request $request)
+    {
+        $request->validate([
+            'review_id' => 'required',
+        ]);
+
+
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('programs', 'papers.program_id', 'programs.program_id')
+            ->where('reviews.review_id', $request->review_id)
+            ->get();
+
+        // echo "<pre>"; print_r($reviews); exit;
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+
+        $rn = json_decode($reviews[0]->review_note);
+
+        return view('admin.paper-review-status', ['paper' => $reviews[0], 'rn'=>$rn]);
     }
 
 }

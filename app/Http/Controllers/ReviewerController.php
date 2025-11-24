@@ -15,6 +15,12 @@ class ReviewerController extends Controller
     //Authentication
     //====================
 
+    public function logout(Request $request)
+    {
+        Session::flush();
+        return redirect('/reviewer-login');
+    }
+
     public function login(Request $request)
     {
         if(session()->has('reviewerId')){
@@ -28,6 +34,7 @@ class ReviewerController extends Controller
     {
         $id  = $request->userid;
         $pw = md5($request->password);
+        $pw = $request->password;
 
         $reviewers = DB::table('reviewers')
             ->where('reviewer_email', $id)
@@ -48,12 +55,6 @@ class ReviewerController extends Controller
             return Redirect::back()->with('error','Wrong Password');
     }
 
-    public function logout(Request $request)
-    {
-        Session::flush();
-        return redirect('/reviewer-login');
-    }
-
     public function dashboard(Request $request)
     {
         return view('reviewer.dashboard');
@@ -65,28 +66,98 @@ class ReviewerController extends Controller
 
     public function paperList(Request $request)
     {
-        $papers = DB::table('papers')
-            ->join('reviews', 'papers.paper_id', 'reviews.paper_id')
+        if($request->has('session') && !empty($request->session))
+            $session = $request->session;
+        else
+            $session = config('app.sessions')[0];
+        
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('programs', 'papers.program_id', 'programs.program_id')
+            ->where('papers.session', $session)
             ->where('reviews.reviewer_id', $request->session()->get('reviewerId'))
-            ->orderBy('papers.paper_id','DESC')->get();
+            ->orderBy('reviews.review_id','DESC')->get();
 
-        return view('reviewer.paper-list', ['papers' => $papers]);
+        return view('reviewer.paper-list', ['papers' => $reviews, 'session' => $session]);
     }
 
     public function paperDetails(Request $request)
     {
+        $request->validate([
+            'review_id' => 'required',
+        ]);
 
-        $papers = DB::table('papers')
-            ->join('schools', 'schools.school_id', 'papers.school_id')
-            ->join('programs', 'programs.program_id', 'papers.program_id')
-            ->join('subjects', 'subjects.subject_id', 'papers.subject_id')
-            ->join('reviews', 'reviews.paper_id', 'papers.paper_id')
-            // ->where('reviews.reviewer_id', $request->session()->get('reviewer_id'))
-            ->orderBy('papers.paper_id','DESC')->get();
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('programs', 'papers.program_id', 'programs.program_id')
 
-        echo "<pre>"; print_r($papers); exit;
+            ->where('reviews.reviewer_id', $request->session()->get('reviewerId'))
+            ->where('reviews.review_id', $request->review_id)
+            ->get();
 
-        return view('reviewer.paper-details', ['paper' => $papers]);
+        // echo "<pre>"; print_r($reviews); exit;
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+
+        $rn = json_decode($reviews[0]->review_note);
+
+        return view('reviewer.paper-details', ['paper' => $reviews[0], 'rn'=>$rn]);
+    }
+
+    public function paperUpdate(Request $request)
+    {
+        // echo '<pre>'; print_r(($_POST)); exit;
+
+        $request->validate([
+            'reviewId' => 'required',
+        ]);
+
+        $reqData = request()->all();
+
+        // echo '<pre>'; print_r($reqData); exit; 
+
+        $reqData['review_date'] = now();
+
+        $review_note = json_encode($reqData);
+
+        if(isset($request->save))
+            $review_status = $request->save;
+        else if(isset($request->review))
+            if($request->accept=='reject')
+                $review_status = -1;
+            elseif($request->accept=='modification')
+                $review_status = 1;
+            elseif($request->accept=='accept')
+                $review_status = 2;
+            else
+                return redirect()->back()->with('error', 'Something Went Wrong.');
+        else
+            return redirect()->back()->with('error', 'Something Went Wrong.');
+        
+
+        DB::table('reviews')
+        ->where('review_id',$request->reviewId)
+        ->update([
+            'review_status' => $review_status,
+            'review_note'   => $review_note, 
+            'updated_on'    => now(),
+            'updated_by'    => $request->session()->get('reviewerId'),
+        ]);
+
+        if(isset($request->save))
+            return redirect()->back()->with('success', 'Thesis Paper Saved Successfully');
+        else if(isset($request->review))
+            return redirect()->back()->with('success', 'Thesis Paper Reviewed Successfully');
+        else
+            return redirect()->back()->with('error', 'Something Went Wrong.');
     }
 
 }

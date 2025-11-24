@@ -14,12 +14,14 @@ class MyMail extends Mailable
     use Queueable, SerializesModels;
 
     public $mailData;
+    public $mailContent;
     /**
      * Create a new message instance.
      */
-    public function __construct($mailData)
+    public function __construct($mailData, $mailContent)
     {
         $this->mailData = $mailData;
+        $this->mailContent = $mailContent;
     }
 
     /**
@@ -38,7 +40,7 @@ class MyMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.myMail',
+            view: 'email.' . $this->mailContent,
         );
     }
 

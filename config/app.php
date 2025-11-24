@@ -185,4 +185,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'sessions' => [2025, 2024, 2023],
+
 ];

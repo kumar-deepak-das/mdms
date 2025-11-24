@@ -32,7 +32,28 @@
                       <!--   Kitchen Sink -->
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
-                               <b>List of Reviewers</b>
+                               <b>List of Papers for Session {!!$session!!}</b>
+                            </div>
+                            <div class="panel-body">
+                                <form class="row" id="myForm">
+                                    <div class="col-sm-3">     
+                                        <div class="form-group">
+                                            <label class="control-label col-sm" for="school">Academic Session:</label>
+                                            <div class="col-sm">     
+                                                <select class="form-control" id="session" name="session" required  onchange="document.getElementById('myForm').submit();">
+                                                    <option value="" selected disabled>Choose the Session</option>
+                                                    @foreach(config('app.sessions') as $s)
+                                                    @if($s==$session)
+                                                    <option value="{{$s}}" selected>{{$s}}</option>
+                                                    @else
+                                                    <option value="{{$s}}">{{$s}}</option>
+                                                    @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
@@ -40,15 +61,12 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Sl No</th>
-                                                <th class="text-center">Paper ID</th>
                                                 <th class="text-center">Roll No</th>
                                                 <th class="text-center">Regn No</th>
-                                                <th class="text-center">Nme of the Student</th>
-                                                <th class="text-center">School</th>
-                                                <th class="text-center">Program</th>
+                                                <th class="text-center">Name of the Student</th>
+                                                <th class="text-center">Paper Title</th>
                                                 <th class="text-center">Subject</th>
-                                                <!-- <th class="text-center">Status</th> -->
-                                                <th class="text-center">Review Status</th>
+                                                <!-- <th class="text-center">Review Status</th> -->
                                                 <th class="text-center">Details</th>
                                             </tr>
                                         </thead>
@@ -58,14 +76,12 @@
                                                 @php $i++ @endphp
                                                 <tr>
                                                     <td class='text-center'>{{$i}}</td>
-                                                    <td class='text-left'>{{$row->paper_id}}</td>
                                                     <td class='text-left'>{{$row->roll}}</td>
                                                     <td class='text-left'>{{$row->regn}}</td>
                                                     <td class='text-left'>{{$row->student_name}}</td>
-                                                    <td class='text-left'>{{$row->school_name}}</td>
-                                                    <td class='text-left'>{{$row->program_name}}</td>
+                                                    <td class='text-left'>{{$row->paper_title}}</td>
                                                     <td class='text-left'>{{$row->subject_name}}</td>
-                                                    <td class="text-center">
+                                                    <!-- <td class="text-center">
                                                         @if(count($reviewers)==0)
                                                             <span>No Reviewers Assigned</span>
                                                         @else
@@ -73,9 +89,9 @@
                                                             <span class="fa fa-star checked"></span>
                                                             <span class="fa fa-star un-checked"></span>
                                                         @endif
-                                                    </td>
+                                                    </td> -->
                                                     <td class='text-center'>
-                                                        <A href="{{asset('admin/paper-details?id='.$row->paper_id)}}" class="btn btn-sm btn-info"> Details </A>
+                                                        <A href="{{asset('admin/paper-details?paper_id='.$row->paper_id)}}" class="btn btn-xs btn-info"> <i class="fa fa-bars"></i> Details </A>
                                                         </form>
                                                     </td>
                                                 </tr>
