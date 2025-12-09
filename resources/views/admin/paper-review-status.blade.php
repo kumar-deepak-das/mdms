@@ -29,11 +29,13 @@
                                <b>Paper Details</b>
                             </div>
                             <div class="panel-body">
+                                
                                 <div class="row">
-                                    <div class="col-md-5 table-responsive">
+                                    <div class="col-md-12 text-center"><H2>{!!$paper->paper_title!!}</H2><hr/></div>
+                                    <div class="col-md-4 table-responsive">
                                         <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">Roll No</th>
+                                                <th class="text-right" style="width: 100px;">Roll No</th>
                                                 <td>{!!$paper->roll!!}</td>
                                             </tr>
                                             <tr>
@@ -41,65 +43,60 @@
                                                 <td>{!!$paper->regn!!}</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-right">Student Name</th>
+                                                <th class="text-right">Name</th>
                                                 <td>{!!$paper->student_name!!}</td>
                                             </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-8 table-responsive">
+                                        <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">School</th>
+                                                <th class="text-right" style="width: 150px;">School</th>
                                                 <td>{!!$paper->school_name!!}</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-right">Program Name</th>
-                                                <td>{!!$paper->program_name!!}</td>
+                                                <th class="text-right">Department Name</th>
+                                                <td>{!!$paper->department_name!!}</td>
                                             </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-7 table-responsive">
-                                        <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">Subject</th>
-                                                <td>{!!$paper->subject_name!!}</td>
-                                            </tr>
-                                            <tr style="height: 125px;">
-                                                <th class="text-right">Title:</th>
-                                                <td>{!!$paper->paper_title!!}</td>
+                                                <th class="text-right">Documents</th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->cert_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->cert_doc)!!}"><i class="fa fa-download"></i> Certificate</A>
+                                                            @else
+                                                                <a class="btn btn-warning">Not Avalable</a>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->thesis_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->thesis_doc)!!}"><i class="fa fa-download"></i>Thesis</A>
+                                                            @else
+                                                                <a class="btn btn-warning">Not Avalable</a>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->data_sheet))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->data_sheet)!!}"><i class="fa fa-download"></i> Data Sheet</A>
+                                                            @else
+                                                                <p class="btn btn-warning btn-xs btn-block" disabled>No Data Sheet Avalable</p>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->other_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->other_doc)!!}"><i class="fa fa-download"></i> Other Document</A>
+                                                            @else
+                                                                <p class="btn btn-warning btn-xs btn-block" disabled>No Doc Avalable</p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->cert_doc))
-                                            <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->cert_doc)!!}"><i class="fa fa-download"></i> Certificate</A>
-                                        @else
-                                            <a class="text-warning">Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->thesis_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->thesis_doc)!!}"><i class="fa fa-download"></i> Thesis</A>
-                                        @else
-                                            <a class="text-warning">Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->data_sheet))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->data_sheet)!!}"><i class="fa fa-download"></i> Data Sheet</A>
-                                        @else
-                                            <a class="text-warning">Data Sheet Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->other_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->other_doc)!!}"><i class="fa fa-download"></i> Other Document</A>
-                                        @else
-                                            <a class="text-warning">No Doc Avalable</a>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -137,12 +134,12 @@
                                                     <div class="table-responsive mt-5">
                                                         <table class="table">
                                                             <tr>
-                                                                <td ><strong>Name of the Candidate</td>
+                                                                <td class="text-right"><strong>Name of the Candidate</td>
                                                                 <th> : </th>
                                                                 <td>{!!$paper->student_name!!}</td>
                                                             </tr>
                                                             <tr>
-                                                                <th>Title of the Thesis</th>
+                                                                <th class="text-right">Title of the Thesis</th>
                                                                 <th> : </th>
                                                                 <td>{!!$paper->paper_title!!}</td>
                                                             </tr>

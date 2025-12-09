@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -15,11 +15,12 @@
                         <h1 class="page-head-line">{{$school->school_name}}</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
+
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
                                <b>Update School Details</b>
@@ -75,22 +76,21 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
+
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
-                               <b>Add a new Program to {{$school->school_name}}</b>
+                               <b>Add a new Department to {{$school->school_name}}</b>
                             </div>
                             <div class="panel-body">
-                                <form method="post" autocomplete="off" action="{{asset('admin/school-program-add')}}">
+                                <form method="post" autocomplete="off" action="{{asset('admin/school-department-add')}}">
                                     @csrf
                                     <div class="container-fluid"> 
                                         <div class="row card-body"> 
                                             <div class="col-sm-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm" for="program">Name of the Program: <span class="text-danger">*</span></label>
+                                                    <label class="control-label col-sm" for="department">Name of the Department: <span class="text-danger">*</span></label>
                                                     <div class="col-sm">
-                                                        <input class="form-control" id="program" placeholder="Program Name" name="program" required>
+                                                        <input class="form-control" id="department" placeholder="Department Name" name="department" required>
                                                     </div>
                                                 </div>        
                                             </div> 
@@ -111,48 +111,46 @@
                                                     </div>
                                                 </div>
                                             </div> 
-                                            <div class="col-sm-4">                                    
+                                            <!-- <div class="col-sm-4">                                    
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm" for="contact_person">Program Code:</label>
+                                                    <label class="control-label col-sm" for="contact_person">department Code:</label>
                                                     <div class="col-sm">       
-                                                        <input class="form-control numberonly" id="code" placeholder="Program Code" name="code" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                                        <input class="form-control numberonly" id="code" placeholder="department Code" name="code" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
                                                     </div>
                                                 </div>     
-                                            </div> 
+                                            </div> --> 
                                             <div class="col-sm-12 text-center">
-                                                <button type="submit" name="add_program" class="btn btn-block btn-primary px-5"> Add Program </button>
+                                                <button type="submit" name="add_department" class="btn btn-block btn-primary px-5"> Add Department </button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-12">
+                    </div>
+                    <div class="col-md-7">
 
                         <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
-                               <b>Different Programs in {{$school->school_name}}</b>
+                               <b>Different Departments in {{$school->school_name}}</b>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-sm table-condensed table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Sl No</th>
-                                                <th class="text-center">Programs</th>
-                                                <th class="text-center">Code</th>
+                                                <th class="text-center" style="width: 60px;">Sl No</th>
+                                                <th class="text-center">Departments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         @php $i=0 @endphp
-                                        @foreach($programs as $p)
+                                        @foreach($departments as $p)
                                             @php $i++ @endphp
                                             <tr>
                                             <td class='text-center'>{{$i}}</td>
-                                            <td class='text-left'>{{$p->program_name}}</td>
-                                            <td class='text-center'>{{$p->code}}</td>
+                                            <td class='text-left'>{{$p->department_name}}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -169,9 +167,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#dataTable').dataTable( {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -15,7 +15,7 @@
                         <h1 class="page-head-line">Add a new School Details</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
@@ -81,9 +81,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#datatable').dataTable( {

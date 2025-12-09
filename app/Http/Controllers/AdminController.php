@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Redirect;
 use Mail;
 use App\Mail\MyMail;
+use Mpdf\Mpdf;
 
 
 class AdminController extends Controller
@@ -80,21 +81,16 @@ class AdminController extends Controller
     {
         $request->validate([
             'school_name'   => 'required',
-            // 'username'      => 'required',
             'contact_person' => 'required',
             'school_email'  => 'required|email',
             'school_phone'  => 'required',
         ]);
 
-        $k =  DB::table('schools')->where('username',$request->input('username'))->get()->count();
-        if($k!=0)
-            return redirect()->back()->with('error', 'Username is already exist')->withInput();
         $k =  DB::table('schools')->where('school_name',$request->input('school_name'))->get()->count();
         if($k!=0)
             return redirect()->back()->with('error', 'School Name is already exist')->withInput();
         DB::table('schools')->insert([            
             'school_name'   => $request->input('school_name'),
-            // 'username'      => $request->input('username'),
             'contact_person'=> $request->input('contact_person'),
             'school_email'  => $request->input('school_email'),
             'school_phone'  => $request->input('school_phone'),
@@ -144,90 +140,99 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'School Details Updated Successfully');
     }
 
-    public function schoolDetails(Request $request)
+    public function schoolDetails(Request $request, $school_id)
     {
-        $request->validate([
-            'schoolid' => 'required',
-        ]);
+        // $request->validate(['schoolid'  => 'required',]);
 
-        $request->validate(['schoolid'  => 'required',]);
-        $school = DB::table('schools')->where('school_id',$request->input('schoolid'))->get();
+        $school = DB::table('schools')->where('school_id',$school_id)->get();
         if(count($school)==0)
             return redirect()->back()->with('error', 'Invalid School');
 
-        $programs = DB::table('programs')->where('school_id', $school[0]->school_id)->get();
+        $departments = DB::table('departments')->where('school_id', $school[0]->school_id)->get();
 
         $schools = DB::table('schools')->select('school_id', 'school_name')->get();
 
-        return view('admin.school-details', ['school' => $school[0], 'programs'=>$programs, 'schools' => $schools, ]);
+        return view('admin.school-details', ['school' => $school[0], 'departments'=>$departments, 'schools' => $schools, ]);
     }
 
-    public function schoolProgramAdd(Request $request)
+    public function schoolDepartmentAdd(Request $request)
     {
         $request->validate([
             'school'     => 'required',
-            'program'   => 'required',
+            'department'   => 'required',
         ]);
-        $k = DB::table('programs')
+        $k = DB::table('departments')
             ->where('school_id', $request->input('school'))
-            ->where('program_name', $request->input('program'))
+            ->where('department_name', $request->input('department'))
             ->get()->count();
 
         if($k!=0)
-            return redirect()->back()->with('error', 'Program is already exist')->withInput();
+            return redirect()->back()->with('error', 'Department is already exist')->withInput();
 
         if($request->has('code') && !empty($request->code) ){
             $code = $request->input('code');
-            $k = DB::table('programs')->where('code', $code)->get()->count();
+            $k = DB::table('departments')->where('code', $code)->get()->count();
             if($k!=0)
-                return redirect()->back()->with('error', 'Program Code is already exist')->withInput();
+                return redirect()->back()->with('error', 'Department Code is already exist')->withInput();
         }
         else
             $code = null;
 
-        DB::table('programs')->insert([            
+        DB::table('departments')->insert([            
             'school_id' => $request->input('school'),
-            'program_name'   => $request->input('program'),
-            'code'      => $code,
+            'department_name'   => $request->input('department'),
         ]);
 
-        return redirect()->back()->with('success', 'Program Added Successfully');
+        return redirect()->back()->with('success', 'Department Added Successfully');
     }
 
-    public function schoolProgramUpdate(Request $request)
+    public function schoolDepartmentUpdate(Request $request)
     {
         $request->validate([
             'school_id' => 'required',
             'school'    => 'required',
-            'program_name'   => 'required',
+            'department_name'   => 'required',
             'code'      => 'required',
         ]);
 
-        $k = DB::table('programs')
-            ->where('program_id', '!=', $request->input('id'))
-            ->where('program_name', $request->input('program'))
+        $k = DB::table('departments')
+            ->where('department_id', '!=', $request->input('id'))
+            ->where('department_name', $request->input('department'))
             ->get()->count();
 
         if($k!=0)
-            return redirect()->back()->with('error', 'Program is already exist')->withInput();
+            return redirect()->back()->with('error', 'Department is already exist')->withInput();
 
-        $k = DB::table('programs')
-            ->where('program_id', '!=', $request->input('id'))
+        $k = DB::table('departments')
+            ->where('department_id', '!=', $request->input('id'))
             ->where('code', $request->input('code'))
             ->get()->count();
 
         if($k!=0)
-            return redirect()->back()->with('error', 'Program Code is already exist')->withInput();
+            return redirect()->back()->with('error', 'Department Code is already exist')->withInput();
 
-        DB::table('programs')->where('program_id', $request->input('id'))->update([            
+        DB::table('departments')->where('department_id', $request->input('id'))->update([            
             'school_id'   => $request->input('school'),
-            'program_name'=> $request->input('program'),
+            'department_name'=> $request->input('department'),
             'code'  => $request->input('code'),
         ]);
 
-        return redirect()->back()->with('success', 'Program Updated Successfully');
+        return redirect()->back()->with('success', 'Department Updated Successfully');
     }
 
+
+    public function getDepartments(Request $request)
+    {
+        $school = $request->input('school');
+        $department = $request->input('department');
+        $departments = DB::table('departments')->where('school_id',$school)->select('department_id', 'department_name')->orderBy('department_name')->get();
+        echo "<option selected disabled value=''>Choose the Department</option>";
+        foreach($departments as $p)
+            if($department==$p->department_id)
+                echo "<option value='$p->department_id' selected>$p->department_name</option>\n";
+            else
+                echo "<option value='$p->department_id'>$p->department_name</option>\n";
+    }
 
 
 
@@ -236,7 +241,9 @@ class AdminController extends Controller
 
     public function reviewerAdd(Request $request)
     {
-        return view('admin.reviewer-add');
+        $schools = DB::table('schools')->orderBy('school_name')->get();
+        // $departments = DB::table('departments')->orderBy('department_name')->get();
+        return view('admin.reviewer-add',['schools'=>$schools]);
     }
     
     public function reviewerAddNow(Request $request)
@@ -245,7 +252,7 @@ class AdminController extends Controller
             'reviewer_name'   => 'required',
             'reviewer_email'  => 'required|email',
             'reviewer_phone'  => 'required',
-            'reviewer_address'  => 'required',
+            // 'reviewer_address'  => 'required',
         ]);
 
         $k =  DB::table('reviewers')->where('reviewer_email',$request->reviewer_email)->get()->count();
@@ -258,9 +265,12 @@ class AdminController extends Controller
         $password = rand(111111,999999);
 
         DB::table('reviewers')->insert([            
+            'department_id'        => $request->department,   
             'reviewer_name'     => $request->reviewer_name,
             'reviewer_email'    => $request->reviewer_email,
             'reviewer_phone'    => $request->reviewer_phone,
+            'reviewer_image'    => 'no_image.png',
+            'reviewer_signature'=> 'no_signature.png',
             'reviewer_address'  => $request->reviewer_address,
             'reviewer_password' => $password, //md5($password),
             'reviewer_status'   => 1,
@@ -274,16 +284,18 @@ class AdminController extends Controller
     public function reviewerList(Request $request)
     {
         $reviewers = DB::table('reviewers')
+            ->join('departments', 'reviewers.department_id', 'departments.department_id')
+            ->orderBy('department_name','ASC')
             ->orderBy('reviewer_name','ASC')->get();
 
         return view('admin.reviewer-list', ['reviewers' => $reviewers]);
     }
 
-    public function reviewerDetails(Request $request)
+    public function reviewerDetails(Request $request, $reviewer_id)
     {
-        $id = $request->id;
+        // $id = $request->id;
 
-        $reviewers = DB::table('reviewers')->where('reviewer_id',$id)->get();
+        $reviewers = DB::table('reviewers')->where('reviewer_id', $reviewer_id)->get();
 
         // echo '<pre>'; print_r($reviewers);exit;
 
@@ -299,9 +311,8 @@ class AdminController extends Controller
         $reviews = DB::table('reviews')
             ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
             ->join('papers', 'reviews.paper_id', 'papers.paper_id')
-            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
             ->join('schools', 'papers.school_id', 'schools.school_id')
-            ->join('programs', 'papers.program_id', 'programs.program_id')
+            ->join('departments', 'papers.department_id', 'departments.department_id')
             ->where('papers.session', $session)
             ->where('reviews.reviewer_id', $reviewers[0]->reviewer_id)
             ->orderBy('reviews.review_id','DESC')->get();
@@ -317,7 +328,6 @@ class AdminController extends Controller
             'reviewer_name'     => 'required',
             'reviewer_email'    => 'required|email',
             'reviewer_phone'    => 'required',
-            'reviewer_address'  => 'required',
         ]);
 
         $k =  DB::table('reviewers')->where('reviewer_id', '!=', $request->reviewer_id)->where('reviewer_email',$request->reviewer_email)->get()->count();
@@ -349,9 +359,9 @@ class AdminController extends Controller
     public function paperAdd(Request $request)
     {
         $schools = DB::table('schools')->orderBy('school_name')->get();
-        $programs = DB::table('programs')->orderBy('program_name')->get();
-        $subjects = DB::table('subjects')->orderBy('subject_name')->get();
-        return view('admin.paper-add', ['schools' => $schools, 'programs'=>$programs, 'subjects'=>$subjects]);
+        $departments = DB::table('departments')->orderBy('department_name')->get();
+        // $subjects = DB::table('subjects')->orderBy('subject_name')->get();
+        return view('admin.paper-add', ['schools' => $schools, 'departments'=>$departments]);
     }
     
     public function paperAddNow(Request $request)
@@ -362,19 +372,18 @@ class AdminController extends Controller
             'regn'          => 'required',
             'student_name'  => 'required',
             'school'        => 'required',
-            'program'       => 'required',
-            'subject'       => 'required',
+            'department'       => 'required',
             'cert_doc'      => 'required|mimes:pdf|max:5242880',
             'thesis_doc'    => 'required|mimes:pdf|max:5242880',
         ]);
 
 
         $cert_doc = $request->roll .'_'.$request->regn.'_'.time().'_cert_doc.'.$request->cert_doc->extension();
-        $request->cert_doc->move(public_path('uplaods/papers'),$cert_doc);
+        $request->cert_doc->move(public_path('uploads/papers'),$cert_doc);
 
 
         $thesis_doc = $request->roll .'_'.$request->regn.'_'.time().'_thesis_doc.'.$request->thesis_doc->extension();
-        $request->thesis_doc->move(public_path('uplaods/papers'),$thesis_doc);
+        $request->thesis_doc->move(public_path('uploads/papers'),$thesis_doc);
 
         if($request->has('data_sheet')){
             $request->validate([
@@ -382,7 +391,7 @@ class AdminController extends Controller
             ]);
 
             $data_sheet = $request->roll .'_'.$request->regn.'_'.time().'_data_sheet.'.$request->data_sheet->extension();
-            $request->data_sheet->move(public_path('uplaods/papers'),$data_sheet);
+            $request->data_sheet->move(public_path('uploads/papers'),$data_sheet);
         }
         else
             $data_sheet=null;
@@ -393,7 +402,7 @@ class AdminController extends Controller
             ]);
 
             $other_doc = $request->roll .'_'.$request->regn.'_'.time().'_other_doc.'.$request->other_doc->extension();
-            $request->other_doc->move(public_path('uplaods/papers'),$other_doc);
+            $request->other_doc->move(public_path('uploads/papers'),$other_doc);
         }
         else
             $other_doc=null;
@@ -405,8 +414,7 @@ class AdminController extends Controller
             'regn'          => $request->regn, 
             'student_name'  => $request->student_name, 
             'school_id'     => $request->school,
-            'program_id'    => $request->program,
-            'subject_id'    => $request->subject,
+            'department_id'    => $request->department,
             'cert_doc'      => $cert_doc,
             'thesis_doc'    => $thesis_doc, 
             'data_sheet'    => $data_sheet,
@@ -426,10 +434,12 @@ class AdminController extends Controller
         else
             $session = config('app.sessions')[0];
 
+        $schools = DB::table('schools')->orderBy('school_name')->get();
+        // $departments = DB::table('departments')->orderBy('department_name')->get();
+
         $papers = DB::table('papers')
             ->join('schools', 'schools.school_id', 'papers.school_id')
-            ->join('programs', 'programs.program_id', 'papers.program_id')
-            ->join('subjects', 'subjects.subject_id', 'papers.subject_id')
+            ->join('departments', 'departments.department_id', 'papers.department_id')
             ->where('papers.session', $session)
             ->orderBy('paper_id','DESC')->get();
 
@@ -439,31 +449,36 @@ class AdminController extends Controller
 
         // echo '<pre>';print_r($reviewers); exit;
 
-        return view('admin.paper-list', ['papers' => $papers, 'reviewers' => $reviewers, 'session' => $session]);
+        return view('admin.paper-list', ['papers' => $papers, 'reviewers' => $reviewers, 'session' => $session, 'schools' => $schools]);
     }
 
-    public function paperDetails(Request $request)
+    public function paperDetails($paper_id)
     {
-        $request->validate([
-            'paper_id'    => 'required',
-        ]);
+        // $request->validate([
+        //     'paper_id'    => 'required',
+        // ]);
 
         $papers = DB::table('papers')
             ->join('schools', 'schools.school_id', 'papers.school_id')
-            ->join('programs', 'programs.program_id', 'papers.program_id')
-            ->join('subjects', 'subjects.subject_id', 'papers.subject_id')
-            ->where('paper_id',$request->paper_id)->get();
+            ->join('departments', 'departments.department_id', 'papers.department_id')
+            ->where('paper_id',$paper_id)->get();
+        if(count($papers)!=1)
+            return redirect()->back()->with('error', 'Invalid Paper')->withInput();
 
         $reviewers = DB::table('reviewers')
+            ->join('departments', 'departments.department_id', 'reviewers.department_id')
+            ->join('schools', 'schools.school_id', 'departments.school_id')
             ->orderBy('reviewer_name','ASC')->get();
 
         $reviews = DB::table('reviews')
             ->join('reviewers','reviews.reviewer_id','reviewers.reviewer_id')
-            ->where('paper_id',$request->paper_id)->get();
+            ->where('paper_id',$paper_id)->get();
+
+        $schools = DB::table('schools')->orderBy('school_name')->get();
             
         // echo '<pre>';print_r($reviews); exit;
 
-        return view('admin.paper-details', ['paper' => $papers[0], 'reviewers' => $reviewers, 'reviews'=>$reviews]);
+        return view('admin.paper-details', ['paper' => $papers[0], 'reviewers' => $reviewers, 'reviews'=>$reviews, 'schools' => $schools]);
     }
 
     public function paperReviewerAssign(Request $request)
@@ -534,20 +549,19 @@ class AdminController extends Controller
         return Redirect::back()->with('success', 'Reviewer Asigned Successfully');
     } 
 
-    public function paperReviewStatus(Request $request)
+    public function paperReviewStatus($review_id)
     {
-        $request->validate([
-            'review_id' => 'required',
-        ]);
+        // $request->validate([
+        //     'review_id' => 'required',
+        // ]);
 
 
         $reviews = DB::table('reviews')
             ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
             ->join('papers', 'reviews.paper_id', 'papers.paper_id')
-            ->join('subjects', 'papers.subject_id', 'subjects.subject_id')
             ->join('schools', 'papers.school_id', 'schools.school_id')
-            ->join('programs', 'papers.program_id', 'programs.program_id')
-            ->where('reviews.review_id', $request->review_id)
+            ->join('departments', 'papers.department_id', 'departments.department_id')
+            ->where('reviews.review_id', $review_id)
             ->get();
 
         // echo "<pre>"; print_r($reviews); exit;
@@ -561,4 +575,78 @@ class AdminController extends Controller
         return view('admin.paper-review-status', ['paper' => $reviews[0], 'rn'=>$rn]);
     }
 
+    public function reviewerRemuneration(Request $request, $reviewer_id)
+    {
+        // $request->validate([
+        //     'review_id' => 'required',
+        // ]);
+
+
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('departments', 'papers.department_id', 'departments.department_id')
+            ->where('reviews.review_id', $reviewer_id)
+            ->get();
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+
+        if($reviews[0]->status!=2){
+            return redirect()->back()->with('error',"Remunaration form not Submited Yet")->withInput();
+        }
+
+        // echo "<pre>"; print_r($reviews); exit;
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+
+        return view('admin.reviewer-remuneration', ['paper' => $reviews[0]]);
+    }
+
+
+    public function reviewerRemunerationDownload(Request $request, $reviewer_id)
+    {
+        $request->validate([
+            'review_id' => 'required',
+        ]);
+
+
+        $reviews = DB::table('reviews')
+            ->join('reviewers', 'reviews.reviewer_id', 'reviewers.reviewer_id')
+            ->join('papers', 'reviews.paper_id', 'papers.paper_id')
+            ->join('schools', 'papers.school_id', 'schools.school_id')
+            ->join('departments', 'papers.department_id', 'departments.department_id')
+            ->where('reviews.review_id', $reviewer_id)
+            ->get();
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+
+        if($reviews[0]->status!=2){
+            return redirect()->back()->with('error',"Remunaration form not Submited Yet")->withInput();
+        }
+
+        // echo "<pre>"; print_r($reviews); exit;
+
+        if(count($reviews)==0){
+            return redirect()->back()->with('error',"Invalid Paper Details")->withInput();
+        }
+        
+        $mpdf = new Mpdf();
+        $html = view('pdf.reviewer-remuneration-download', [
+            'paper' => $reviews[0],
+            'title' => 'mPDF Example',
+            'date'  => date('Y-m-d')
+        ])
+        //->setPaper('a4', 'portrait')
+        ->render();
+
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('document.pdf', 'I'); // Inline display
+    }
 }

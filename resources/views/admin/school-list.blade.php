@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -15,7 +15,7 @@
                         <h1 class="page-head-line">Schools</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
@@ -37,7 +37,7 @@
                                                 <th class="text-center">Phone</th>
                                                 <th class="text-center">Email</th>
                                                 <th class="text-center">Status</th>
-                                                <th class="text-center">Password</th>
+                                                <!-- <th class="text-center">Password</th> -->
                                                 <th class="text-center">Details</th>
                                             </tr>
                                         </thead>
@@ -58,15 +58,15 @@
                                                             <i class='fa fa-window-close' style='color:red;'></i>
                                                         @endif
                                                     </td>
-                                                    <td class='text-center'>
+                                                    <!-- <td class='text-center'>
                                                         <form method='post' action="{{asset('admin/school-password-reset')}}">
                                                             @csrf
                                                             <input type='hidden' name='school_id' value="{{$row->school_id}}">
                                                             <input type='submit' class='btn btn-sm btn-danger' name='reset' value='Reset' onClick='return confirmSubmit("Are you sure to Reset the Password to kiit@123?");'>
                                                         </form>
-                                                    </td>
+                                                    </td> -->
                                                     <td class='text-center'>
-                                                        <A href="{{asset('admin/school-details?schoolid='.$row->school_id)}}" class="btn btn-sm btn-info"> Details </A>
+                                                        <A href="{{asset('admin/school-details/'.$row->school_id)}}" class="btn btn-sm btn-info"> Details </A>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -87,9 +87,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#dataTable').dataTable( {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -15,7 +15,7 @@
                         <h1 class="page-head-line">Paper Details</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
@@ -27,11 +27,13 @@
                                <b>Paper Details</b>
                             </div>
                             <div class="panel-body">
+                                
                                 <div class="row">
-                                    <div class="col-md-5 table-responsive">
+                                    <div class="col-md-12 text-center"><H2>{{$paper->paper_title}}</H2><hr/></div>
+                                    <div class="col-md-4 table-responsive">
                                         <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">Roll No</th>
+                                                <th class="text-right" style="width: 100px;">Roll No</th>
                                                 <td>{!!$paper->roll!!}</td>
                                             </tr>
                                             <tr>
@@ -39,67 +41,64 @@
                                                 <td>{!!$paper->regn!!}</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-right">Student Name</th>
+                                                <th class="text-right">Name</th>
                                                 <td>{!!$paper->student_name!!}</td>
                                             </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-8 table-responsive">
+                                        <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">School</th>
+                                                <th class="text-right" style="width: 150px;">School</th>
                                                 <td>{!!$paper->school_name!!}</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-right">Program Name</th>
-                                                <td>{!!$paper->program_name!!}</td>
+                                                <th class="text-right">Department Name</th>
+                                                <td>{!!$paper->department_name!!}</td>
                                             </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-7 table-responsive">
-                                        <table class="table table-sm table-condensed table-bordered">
                                             <tr>
-                                                <th class="text-right">Subject</th>
-                                                <td>{!!$paper->subject_name!!}</td>
-                                            </tr>
-                                            <tr style="height: 125px;">
-                                                <th class="text-right">Title:</th>
-                                                <td>{!!$paper->paper_title!!}</td>
+                                                <th class="text-right">Documents</th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->cert_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->cert_doc)!!}"><i class="fa fa-download"></i> Certificate</A>
+                                                            @else
+                                                                <a class="text-warning">Not Avalable</a>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->thesis_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->thesis_doc)!!}"><i class="fa fa-download"></i> Thesis</A>
+                                                            @else
+                                                                <a class="text-warning">Not Avalable</a>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->data_sheet))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->data_sheet)!!}"><i class="fa fa-download"></i> Data Sheet</A>
+                                                            @else
+                                                                <p class="btn btn-xs btn-block" disabled>Data Sheet Not Avalable</p>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="col-md-3 text-center">
+                                                            @if(!empty($paper->other_doc))
+                                                            <A target="_blank" class="btn btn-xs btn-block btn-info" href="{!!asset('public/uploads/papers/'.$paper->other_doc)!!}"><i class="fa fa-download"></i> Other Document</A>
+                                                            @else
+                                                                <p class="btn btn-xs btn-block" disabled>No Doc Avalable</p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
 
-                                <div class="row">
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->cert_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block btn-info" href="{!!asset('public/uplaods/papers/'.$paper->cert_doc)!!}"><i class="fa fa-download"></i> Certificate</A>
-                                        @else
-                                            <a class="text-warning">Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->thesis_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block btn-info" href="{!!asset('public/uplaods/papers/'.$paper->thesis_doc)!!}"><i class="fa fa-download"></i> Thesis</A>
-                                        @else
-                                            <a class="text-warning">Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->data_sheet))
-                                        <A target="_blank" class="btn btn-sm btn-block btn-info" href="{!!asset('public/uplaods/papers/'.$paper->data_sheet)!!}"><i class="fa fa-download"></i> Data Sheet</A>
-                                        @else
-                                            <a class="text-warning">Data Sheet Not Avalable</a>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-3 text-center py-3">
-                                        @if(!empty($paper->other_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block btn-info" href="{!!asset('public/uplaods/papers/'.$paper->other_doc)!!}"><i class="fa fa-download"></i> Other Document</A>
-                                        @else
-                                            <a class="text-warning">No Doc Avalable</a>
-                                        @endif
-                                    </div>
-                                </div>
+                                
 
                                 <div class="row">                                
                                     <div class="col-md-12 table-responsive mt-3">
@@ -110,8 +109,8 @@
                                                     <th>#</th>
                                                     <th>Reviewer Name</th>
                                                     <th>Assigned Date</th>
-                                                    <th>Status</th>
                                                     <th>Review Status</th>
+                                                    <th>Remuneration</th>
                                                     <th>Details</th>
                                                 </tr>
                                             </thead>
@@ -130,19 +129,27 @@
                                                     <td>{!!$row->reviewer_name!!}</td>
                                                     <td class="text-center">{!!$row->created_on!!}</td>
                                                     <td class="text-center">
-                                                    @if($row->review_status==-1)
-                                                        <b class="label label-danger"> Rejected </b>
-                                                    @elseif($row->review_status==0)
-                                                        <b class="label label-warning"> Pending </b>
-                                                    @elseif($row->review_status==1)
-                                                        <b class="label label-info"> Accept with Modified </b>
-                                                    @elseif($row->review_status==2)
-                                                        <b class="label label-success"> Accepted </b>
-                                                    @endif
+                                                        @if($row->review_status==-1)
+                                                            <b class="label label-danger"> <i class="fa fa-ban"></i> Rejected </b>
+                                                        @elseif($row->review_status==0)
+                                                            <b class="label label-warning"> <i class="fa fa-clock-o"></i> Pending </b>
+                                                        @elseif($row->review_status==1)
+                                                            <b class="label label-info"> <i class="fa fa-check"></i> Accept with Modified </b>
+                                                        @elseif($row->review_status==2)
+                                                            <b class="label label-success"> <i class="fa fa-check"></i> Accepted </b>
+                                                        @endif
                                                     </td>
-                                                    <td></td>
                                                     <td class="text-center">
-                                                        <A href="{{asset('admin/paper-review-status?review_id='.$row->review_id)}}" class="btn btn-xs btn-info"> <i class="fa fa-bars"></i> Details </A>
+                                                        @if($row->review_status!=0 && $row->status==1)
+                                                            <b class="label label-warning"> <i class="fa fa-clock-o"></i> Not Submited </b>
+                                                        @elseif($row->review_status!=0 && $row->status==2)
+                                                            <b class="label label-info"> <i class="fa fa-check"></i> Submited </b>
+                                                        @elseif($row->review_status!=0 && $row->status==3)
+                                                            <b class="label label-info"> <i class="fa fa-check"></i> Paied </b>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <A href="{{asset('admin/paper-review-status/'.$row->review_id)}}" class="btn btn-xs btn-info"> <i class="fa fa-bars"></i> Details </A>
                                                     </td>
                                                 </tr>
                                             @endforeach                                            
@@ -165,16 +172,48 @@
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                         <h4 class="modal-title">Assign Reviewer</h4>
                                                     </div>
-                                                    <div class="modal-body">                                                    
+                                                    <div class="modal-body">       
+                                                        <!-- <div class="row">
+                                                            <div class="col-md-1"></div>
+                                                            <div class="col-md-5">     
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-sm" for="school">School:</label>
+                                                                    <div class="col-sm">
+                                                                        <select class="form-control" id="school" name="school" required>
+                                                                            <option value="" selected disabled>Choose the School</option>
+                                                                            @foreach($schools as $s)
+                                                                            @if($s->school_id==old('school'))
+                                                                            <option value="{{$s->school_id}}" selected>{{$s->school_name}}</option>
+                                                                            @else
+                                                                            <option value="{{$s->school_id}}">{{$s->school_name}}</option>
+                                                                            @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5">    
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-sm" for="department">Department:</label>
+                                                                    <div class="col-sm">       
+                                                                        <select class="form-control" id="department" name="department" required>
+                                                                            <option value="" selected disabled>Choose the Department</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+
                                                         <div class="table-responsive">
                                                             <table class="table table-sm table-condensed table-bordered" id="dataTable">
                                                                 <thead>
                                                                     <tr>
                                                                         <th class="text-center">Sl No</th>
+                                                                        <th class="text-center">School</th>
+                                                                        <th class="text-center">Department</th>
                                                                         <th class="text-center">Reviewer Name</th>
-                                                                        <th class="text-center">Email</th>
-                                                                        <th class="text-center">Phone</th>
-                                                                        <th class="text-center">Adress</th>
+                                                                        <th class="text-center">Email & Phone</th>
+                                                                        <!-- <th class="text-center">Adress</th> -->
                                                                         <th class="text-center">Assign</th>
                                                                     </tr>
                                                                 </thead>
@@ -184,10 +223,13 @@
                                                                         @php $i++ @endphp
                                                                         <tr>
                                                                             <td class='text-center'>{!!$i!!}</td>
+                                                                            <td class='text-left'>{!!$row->school_name!!}</td>
+                                                                            <td class='text-left'>{!!$row->department_name!!}</td>
                                                                             <td class='text-left'>{!!$row->reviewer_name!!}</td>
-                                                                            <td class='text-left'>{!!$row->reviewer_email!!}</td>
-                                                                            <td class='text-left'>{!!$row->reviewer_phone!!}</td>
-                                                                            <td class='text-left'>{!!$row->reviewer_address!!}</td>
+                                                                            <td class='text-left'>
+                                                                                <i class="fa fa-envelope"></i> {!!$row->reviewer_email!!}<br/>
+                                                                                <i class="fa fa-phone"></i> {!!$row->reviewer_phone!!}</td>
+                                                                            <!-- <td class='text-left'>{!!$row->reviewer_address!!}</td> -->
                                                                             <td class='text-center'>
                                                                                 @if(array_search($row->reviewer_id, $assigned_reviewer))
                                                                                     <span class="label label-danger"> Assigned </span>
@@ -196,7 +238,7 @@
                                                                                         @csrf
                                                                                         <input type="hidden" name="paper" value="{!!$paper->paper_id!!}">
                                                                                         <input type="hidden" name="reviewer" value="{!!$row->reviewer_id!!}">
-                                                                                        <button class="btn btn-xs btn-success"> <i class='fa fa-plus-circle'></i> Assign </button>
+                                                                                        <button class="btn btn-sm btn-success"> <i class='fa fa-plus-circle'></i> Assign </button>
                                                                                     </form>
                                                                                 @endif
                                                                             </td>
@@ -231,9 +273,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#dataTable').dataTable( {

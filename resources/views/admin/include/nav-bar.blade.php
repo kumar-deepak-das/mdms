@@ -38,7 +38,7 @@
                 <a href="#" class="@if( Request::is('admin/school-add') || Request::is('admin/school-list') || Request::is('admin/school-details') ) active-menu-top @endif"><i class="fa fa-bank"></i>Schools <span class="fa arrow"></span></a>
                  <ul class="nav nav-second-level @if( Request::is('admin/school-add') || Request::is('admin/school-list') || Request::is('admin/school-details') ) collapse in @endif">
                     <li><a href="{{asset('admin/school-add')}}" class="@if(Request::is('admin/school-add')) active-menu-top @endif"><i class="fa fa-bank"></i>Add School</a></li>
-                    <li><a href="{{asset('admin/school-list')}}" class="@if(Request::is('admin/school-list')) active-menu-top @endif"><i class="fa fa-bars"></i>View Schools</a></li>
+                    <li><a href="{{asset('admin/school-list')}}" class="@if(Request::is('admin/school-list')) active-menu-top @endif"><i class="fa fa-bars"></i>School List</a></li>
                 </ul>
             </li>
 

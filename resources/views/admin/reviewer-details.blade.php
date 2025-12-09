@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -15,7 +15,7 @@
                         <h1 class="page-head-line">Reviewer Details</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
@@ -33,7 +33,7 @@
                                     <div class="row card-body"> 
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="control-label col-sm" for="reviewer_name">Name of the Reviewer:</label>
+                                                <label class="control-label col-sm" for="reviewer_name">Name of the Reviewer: <span class="text-danger"> * </span> </label>
                                                 <div class="col-sm">       
                                                     <input class="form-control" id="reviewer_name" placeholder="Reviewer Name" name="reviewer_name" value="{{$reviewer->reviewer_name}}" required>
                                                 </div>
@@ -41,7 +41,7 @@
                                         </div> 
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label class="control-label col-sm" for="reviewer_email">Email ID of Reviewer:</label>
+                                                <label class="control-label col-sm" for="reviewer_email">Email ID of Reviewer: <span class="text-danger"> * </span> </label>
                                                 <div class="col-sm">       
                                                     <input type="email" class="form-control" id="reviewer_email" placeholder="Reviewer Email ID" name="reviewer_email" value="{{$reviewer->reviewer_email}}" required>
                                                 </div>
@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label class="control-label col-sm" for="reviewer_phone">Mobile No of Reviewer:</label>
+                                                <label class="control-label col-sm" for="reviewer_phone">Mobile No of Reviewer: <span class="text-danger"> * </span> </label>
                                                 <div class="col-sm">       
                                                     <input class="form-control" id="reviewer_phone" placeholder="Reviewer Phone No" name="reviewer_phone" onkeypress="return isNumber(event)" maxlength="10" minlength="10" value="{{$reviewer->reviewer_phone}}" required>
                                                 </div>
@@ -59,7 +59,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-sm" for="reviewer_address">Address:</label>
                                                 <div class="col-sm">       
-                                                    <input class="form-control" id="reviewer_address" placeholder="Reviewer address No" name="reviewer_address" value="{{$reviewer->reviewer_address}}" required>
+                                                    <input class="form-control" id="reviewer_address" placeholder="Reviewer address No" name="reviewer_address" value="{{$reviewer->reviewer_address}}" >
                                                 </div>
                                             </div>     
                                         </div> 
@@ -113,7 +113,7 @@
                                                 <th class="text-center">Paper Title</th>
                                                 <th class="text-center">Subject</th>
                                                 <th class="text-center">Review Status</th>
-                                                <th class="text-center">Details</th>
+                                                <th class="text-center">Remunaration</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -126,7 +126,6 @@
                                                     <td class='text-left'>{{$row->regn}}</td>
                                                     <td class='text-left'>{{$row->student_name}}</td>
                                                     <td class='text-left'>{{$row->paper_title}}</td>
-                                                    <td class='text-left'>{{$row->subject_name}}</td>
                                                     <td class="text-center">
                                                         @if($row->review_status==-1)
                                                             <b class="label label-danger"> Rejected </b>
@@ -139,7 +138,11 @@
                                                         @endif
                                                     </td>
                                                     <td class='text-center'>
-                                                        <A href="{{asset('admin/paper-review-status?review_id='.$row->review_id)}}" class="btn btn-sm btn-info"> <i class="fa fa-bars"></i> Details </A>
+                                                        <A href="{{asset('admin/paper-review-status/'.$row->review_id)}}" class="btn btn-sm btn-info"> <i class="fa fa-bars"></i> Details </A>
+                                                        </form>
+                                                    </td>
+                                                    <td class='text-center'>
+                                                        <A href="{{asset('admin/reviewer-remuneration/'.$row->review_id)}}" class="btn btn-sm btn-success"> <i class="fa fa-credit-card"></i> Details </A>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -161,7 +164,7 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')        
-        @include('admin.include.bottom')
+        @include('inc.footer')        
+        @include('inc.bottom')
     </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -16,7 +16,7 @@
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>                    
                     <div class="col-md-9">
-                        @include('admin.include.success-error-message')
+                        @include('inc.success-error-message')
                         <form>
                             <div class="form-group row">
                                 <label class="mt-5 control-label col-sm-2 col-xs-3 text-right"><b>Date Range:</b></label>
@@ -133,9 +133,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#datatable').dataTable( {

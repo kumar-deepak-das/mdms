@@ -1,7 +1,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fancy Animated Login Page</title>
+  <title>RevieweLogin Page</title>
   <style>
     /* Background styling */
     body {
@@ -122,5 +122,20 @@
         transform: translateY(0);
         opacity: 1;
       }
+    }
+
+    .error-box {
+      background: rgba(255, 0, 0, 0.25);
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 3px solid #ff4d4d;
+      text-align: left;
+    }
+
+    .error-box p {
+      margin: 0;
+      color: #ffe6e6;
+      font-size: 13px;
     }
   </style>

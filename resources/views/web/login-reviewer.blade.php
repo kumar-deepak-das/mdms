@@ -20,10 +20,11 @@
       
     </form>
     @if(session()->has('error'))
-    <div class="py-2" style="color: red;">
-      <strong>Error:</strong> {!! session()->get('error') !!}
+    <div class="error-box">
+      <p><strong>Error:</strong> {!! session()->get('error') !!}</p>
     </div>
     @endif
+
   </div>
 
   @include('web.script')

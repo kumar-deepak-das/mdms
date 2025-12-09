@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    @include('admin.include.head')
+    @include('inc.head')
 </head>
 <body>
     <div id="wrapper">
@@ -75,7 +75,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12" style="min-height: 80px;">
-                                        @include('admin.include.success-error-message')
+                                        @include('inc.success-error-message')
                                     </div>
                                 </div>
                             </form>
@@ -97,9 +97,9 @@
     <!-- /. WRAPPER  -->            
 
 
-    @include('admin.include.footer')
+    @include('inc.footer')
 
 
-    @include('admin.include.bottom')
+    @include('inc.bottom')
 </body>
 </html>

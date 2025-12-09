@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
         <!--PAGE LEVELC STYLES-->
         <link href="{{ asset('public/assets/admin/css/invoice.css')}}" rel="stylesheet" />
     </head>
@@ -17,88 +17,48 @@
                         <h1 class="page-head-line">Paper Details</h1>
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
                 <div class="row">
                     <div class="col-md-12">
                       <!--   Kitchen Sink -->
-                        <div class="panel panel-success">
+                        <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
                                <b>Paper Details</b>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-5 table-responsive">
-                                        <table class="table table-sm table-condensed table-bordered">
-                                            <tr>
-                                                <th class="text-right">Roll No</th>
-                                                <td>{!!$paper->roll!!}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Regn No</th>
-                                                <td>{!!$paper->regn!!}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Student Name</th>
-                                                <td>{!!$paper->student_name!!}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">School</th>
-                                                <td>{!!$paper->school_name!!}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Program Name</th>
-                                                <td>{!!$paper->program_name!!}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-7 table-responsive">
-                                        <table class="table table-sm table-condensed table-bordered">
-                                            <tr>
-                                                <th class="text-right" style="width: 100px;">Subject</th>
-                                                <td class="text-left">{!!$paper->subject_name!!}</td>
-                                            </tr>
-                                            <tr style="height: 125px;">
-                                                <th class="text-right">Title:</th>
-                                                <td class="text-left">{!!$paper->paper_title!!}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <div class="col-md-3 text-center py-3">
+                                    <div class="col-md-3 text-center">
                                         @if(!empty($paper->cert_doc))
-                                            <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->cert_doc)!!}"><i class="fa fa-download"></i> Certificate</A>
+                                        <A target="_blank" class="btn btn-block btn-success" href="{{asset('public/uploads/papers/'.$paper->cert_doc)}}"><i class="fa fa-download"></i> Certificate</A>
                                         @else
-                                            <a class="text-warning">Not Avalable</a>
+                                            <p class="btn btn-block btn-warning" disabled>Not Avalable</p>
                                         @endif
                                     </div>
 
-                                    <div class="col-md-3 text-center py-3">
+                                    <div class="col-md-3 text-center">
                                         @if(!empty($paper->thesis_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->thesis_doc)!!}"><i class="fa fa-download"></i> Thesis</A>
+                                        <A target="_blank" class="btn btn-block btn-success" href="{{asset('public/uploads/papers/'.$paper->thesis_doc)}}"><i class="fa fa-download"></i> Thesis</A>
                                         @else
-                                            <a class="text-warning">Not Avalable</a>
+                                            <p class="btn btn-block btn-warning" disabled>Not Avalable</p>
                                         @endif
                                     </div>
 
-                                    <div class="col-md-3 text-center py-3">
+                                    <div class="col-md-3 text-center">
                                         @if(!empty($paper->data_sheet))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->data_sheet)!!}"><i class="fa fa-download"></i> Data Sheet</A>
+                                        <A target="_blank" class="btn btn-block btn-info" href="{{asset('public/uploads/papers/'.$paper->data_sheet)}}"><i class="fa fa-download"></i> Data Sheet</A>
                                         @else
-                                            <a class="text-warning">Data Sheet Not Avalable</a>
+                                            <p class="btn btn-block btn-warning" disabled>Data Sheet Not Avalable</p>
                                         @endif
                                     </div>
 
-                                    <div class="col-md-3 text-center py-3">
+                                    <div class="col-md-3 text-center">
                                         @if(!empty($paper->other_doc))
-                                        <A target="_blank" class="btn btn-sm btn-block1 btn-info" href="{!!asset('public/uplaods/papers/'.$paper->other_doc)!!}"><i class="fa fa-download"></i> Other Document</A>
+                                        <A target="_blank" class="btn btn-block btn-info" href="{{asset('public/uploads/papers/'.$paper->other_doc)}}"><i class="fa fa-download"></i> Other Document</A>
                                         @else
-                                            <a class="text-warning">No Doc Avalable</a>
+                                            <p class="btn btn-block btn-warning" disabled>No Doc Avalable</p>
                                         @endif
                                     </div>
                                 </div>
@@ -111,7 +71,7 @@
                 <div class="row">
                     <div class="col-md-12">
                       <!--   Kitchen Sink -->
-                        <div class="panel panel-success">
+                        <div class="panel panel-primary">
                             <div class="panel-heading" style="letter-spacing: 3px;">
                                <b>Review Status</b>
                             </div>
@@ -135,16 +95,14 @@
                                                 <div class="col-md-1"></div>
                                                 <div class="col-md-10">
                                                     <div class="table-responsive mt-5">
-                                                        <table class="table">
-                                                            <tr>
-                                                                <td><strong>Name of the Candidate</td>
-                                                                <th> : </th>
-                                                                <td>{!!$paper->student_name!!}</td>
+                                                        <table class="table table-bordered">
+                                                            <tr class="bg-primary text-white">
+                                                                <th style="width: 150px;">Thesis ID</th>
+                                                                <th>Title of the Thesis</th>
                                                             </tr>
                                                             <tr>
-                                                                <th>Title of the Thesis</th>
-                                                                <th> : </th>
-                                                                <td>{!!$paper->paper_title!!}</td>
+                                                                <th>{{$paper->paper_id}}</th>
+                                                                <th class="text-left">{{$paper->paper_title}}</th>
                                                             </tr>
                                                         </table>
                                                     </div>
@@ -168,7 +126,7 @@
                                                                     <th class="text-left">2.</th>
                                                                     <th class="text-left">
                                                                         Accepted After Correction.<br/>
-                                                                        (<i>The Corrections are to be verified by the Internal Committee at he University Level</i>) 
+                                                                        (<i>The Corrections are to be verified by the Internal Committee at the University Level</i>) 
                                                                     </th>
                                                                     <td>
                                                                         <input type="radio" required name="accept" id="accept2" value="modification" onclick="toggleTextarea()" @if($rn->accept=='modification') checked @endif />
@@ -178,32 +136,6 @@
                                                                     <th>3.</th>
                                                                     <td>
                                                                         <strong>Rejected (Please Give Reason)</strong>
-                                                                        <textarea name="rem" class="form-control mt-3"  style="resize:none; min-height: 100px;" id="textarea1">{!!$rn->rem!!}</textarea>
-                                                                        <script>
-                                                                            const textarea1 = document.getElementById("textarea1");
-                                                                            textarea1.addEventListener("input", function() {
-                                                                                this.style.height = "auto";      // reset height
-                                                                                this.style.height = this.scrollHeight + "px"; // set new height
-                                                                            });
-
-                                                                            @if($rn->accept=='reject') 
-                                                                                document.getElementById("textarea1").style.display = "block"; 
-                                                                            @else
-                                                                                document.getElementById("textarea1").style.display = "none"; 
-                                                                            @endif
-
-                                                                            function toggleTextarea() {
-                                                                                const maleSelected = document.querySelector('input[name="accept"][value="reject"]').checked;
-                                                                                const textarea = document.getElementById("textarea1");
-
-                                                                                if (maleSelected) {
-                                                                                    textarea.style.display = "block";   // Show textarea
-                                                                                } else {
-                                                                                    textarea.style.display = "none";    // Hide textarea
-                                                                                }
-                                                                                
-                                                                            }
-                                                                        </script>
                                                                     </td>
                                                                     <td class="text-center">
                                                                         <input type="radio" required name="accept" name="accept3" value="reject" onclick="toggleTextarea()" @if($rn->accept=='reject') checked @endif />
@@ -306,28 +238,39 @@
                                                                 </tr>
                                                             </tbody>
                                                         </table>
-
-                                                        <Strong>Comment:</Strong>
-                                                        <textarea name="comment" class="form-control mb-3 text-left" style="resize:none; min-height: 200px;" id="textarea2">{!!$rn->comment!!}</textarea>
-                                                        <script>
-                                                            const textarea2 = document.getElementById("textarea2");
-                                                            textarea2.addEventListener("input", function() {
-                                                                this.style.height = "auto";      // reset height
-                                                                this.style.height = this.scrollHeight + "px"; // set new height
-                                                            });
-                                                        </script>
                                                     </div>
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                        <label class="control-label col-sm" for="school">Comment: <span class="text-danger"> * </span> </label>
+                                                        <div class="col-sm">
+                                                            <textarea name="comment" class="form-control mb-3 text-left" style="resize:none; min-height: 200px;" id="comment">{{$rn->comment}}</textarea>
+                                                            <script>
+                                                                const comment = document.getElementById("comment");
+                                                                comment.addEventListener("input", function() {
+                                                                    this.style.height = "auto";      // reset height
+                                                                    this.style.height = this.scrollHeight + "px"; // set new height
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                    </div> 
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                        <label class="control-label col-sm" for="school">Upload Review Document (if any):</label>
+                                                        <div class="col-sm">
+                                                            <input type="file" name="file" class="form-control">
+                                                        </div>
+                                                    </div> 
                                                     @if($paper->review_status==0)
                                                     <hr />
                                                     <div class="mb-5 text-center">
-                                                        <button name="save" value="0" class="btn btn-primary btn-lg" >
-                                                        <i class="fa fa-save"></i> Save Details</button>
-                                                        &nbsp;&nbsp;&nbsp;
-                                                        <button name="review" value="1" class="btn btn-success btn-lg" >
-                                                            <i class="fa fa-check"></i> Mark as Reviewed
+                                                        <!-- <button name="save" value="0" class="btn btn-success btn-lg" >
+                                                        <i class="fa fa-save"></i> Save as Draft</button>
+                                                        &nbsp;&nbsp;&nbsp; -->
+                                                        <button name="review" value="1" class="btn btn-primary btn-lg" >
+                                                            <i class="fa fa-check"></i> Submit
                                                         </button>
                                                         @csrf
-                                                        <input type="hidden" name="reviewId" value="{!!$paper->review_id!!}">
+                                                        <input type="hidden" name="reviewId" value="{{$paper->review_id}}">
                                                     </div>
                                                     @endif
                                                     <hr/>
@@ -340,22 +283,28 @@
                                                 <div class="col-md-5">
                                                 
                                                     <h4><strong>Reviewed By </strong></h4>
-                                                    <strong>{!!$paper->reviewer_name!!}</strong>
+                                                    <strong>{{$paper->reviewer_name}}</strong>
                                                     <br />
-                                                    <b>Call :</b> {!!$paper->reviewer_phone!!}
+                                                    <b>Call :</b> {{$paper->reviewer_phone}}
                                                     <br />
-                                                    <b>E-mail :</b> {!!$paper->reviewer_email!!}
+                                                    <b>E-mail :</b> {{$paper->reviewer_email}}
                                                 </div>
                                                 <div class="col-md-5 text-right">
                                                     <!-- <h4>  <strong></strong></h4> -->
                                                     <!-- <strong>  Jhon Deo Chuixae</strong> -->
-                                                    <b>Review Date :</b> {!!date_format(date_create($rn->review_date),"d-M-yy")!!}
+                                                    <b>Review Date :</b> {{date_format(date_create($rn->review_date),"d-M-yy")}}
                                                 </div>
                                             </div>
                                             @endif
-                                        </form>
-
-                                         
+                                            @if($paper->status==1)
+                                                <div  class="row mb-5 pad-top-botm1 client-info">
+                                                    <hr />
+                                                    <div class="mb-5 text-center">
+                                                        <a class="btn btn-warning" href="{{asset('reviewer/remuneration/'.$paper->review_id)}}"> <i class="fa fa-credit-card"></i> Submit Remunaration Form</a>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </form>                                         
                                     </div>
                                     <!-- /. PAGE INNER  -->
                                 </div>
@@ -363,17 +312,16 @@
                         </div>
                     </div>
                 </div>
-            </div>                        
-
+            </div>
         </div>
         <!-- /. PAGE WRAPPER  -->
         </div>
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#dataTable').dataTable( {

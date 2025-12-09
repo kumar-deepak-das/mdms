@@ -11,8 +11,8 @@
         <!-- <img src="{{ asset('public/assets/images/logo/kiit-logo-wide.png') }}" class="img-responsive1 img-thumbnail" /> -->
     </div>
     <div class="header-right">
-        <!-- <a href="{{asset('admin')}}" class="btn btn-info" title="New Message"><b>30 </b><i class="fa fa-envelope-o fa-2x"></i></a> -->
-        <a href="{{asset('reviewer/profile')}}" class="btn btn-primary" title="My Profile"><b></b><i class="fa fa-bars fa-2x"></i></a>
+        <!-- <span  class="btn btn-info"><b><i class="fa fa-user fa-2x"></i> {{Session::get('reviewerName','')}}</b></span> -->
+        <a href="{{asset('reviewer/profile')}}" class="btn btn-primary" title="My Profile"><b></b><i class="fa fa-user fa-2x"></i> {{Session::get('reviewerName','')}}</a>
         <a href="{{asset('/reviewer/logout')}}" class="btn btn-danger" title="Logout"><i class="fa fa-sign-out fa-2x"></i></a>
 
     </div>
@@ -33,12 +33,12 @@
                 <a class="active-menu" href="{{asset('reviewer/dashboard')}}"><i class="fa fa-dashboard "></i>Dashboard</a>
             </li>
 
-            <li>
+            <!-- <li>
                 <a href="#" class="@if( Request::is('reviewer/paper-list') || Request::is('reviewer/paper-view')) active-menu-top @endif"><i class="fa fa-file"></i>Paper <span class="fa arrow"></span></a>
                  <ul class="nav nav-second-level @if( Request::is('reviewer/paper-list') || Request::is('reviewer/paper-view')  || Request::is('reviewer/paper-add') ) collapse in @endif">
                     <li><a href="{{asset('reviewer/paper-list')}}" class="@if(Request::is('reviewer/paper-list')) active-menu-top @endif"><i class="fa fa-users"></i>Paper List</a></li>
                 </ul>
-            </li>
+            </li> -->
 
         </ul>
 

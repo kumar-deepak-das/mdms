@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        @include('admin.include.head')
+        @include('inc.head')
     </head>
     <body>
         <div id="wrapper">
@@ -16,7 +16,7 @@
                             Add a new School Details
                         <!-- <h1 class="page-subhead-line">Brands / Manufacturers</h1> -->
                     </div>
-                    <div class="col-md-7">@include('admin.include.success-error-message')</div>
+                    <div class="col-md-7">@include('inc.success-error-message')</div>
                 </div>
                 <!-- /. ROW  -->
               
@@ -79,7 +79,7 @@
                                             <input type="hidden" name="school_id" value="{{$school->school_id}}" required>
                                         </div>
                                         <div class="col-sm-8 py-5">
-                                            @include('admin.include.success-error-message')
+                                            @include('inc.success-error-message')
                                         </div>
                                     </div>
                                 </div>
@@ -96,9 +96,9 @@
         <!-- /. WRAPPER  -->            
 
 
-        @include('admin.include.footer')
+        @include('inc.footer')
         
-        @include('admin.include.bottom')
+        @include('inc.bottom')
 
         <script type="text/javascript">
             $('#datatable').dataTable( {

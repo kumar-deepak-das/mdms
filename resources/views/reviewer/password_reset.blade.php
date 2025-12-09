@@ -45,7 +45,7 @@
                  </form>
             </div>
             <div class="pannel-footer">
-                @include('admin.include.success-error-message')
+                @include('inc.success-error-message')
             </div>
         </div>
      </div>
