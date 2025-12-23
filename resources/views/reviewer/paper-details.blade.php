@@ -94,6 +94,7 @@
                                             <div class="row">
                                                 <div class="col-md-1"></div>
                                                 <div class="col-md-10">
+                                                    <!-- Paper Details -->
                                                     <div class="table-responsive mt-5">
                                                         <table class="table table-bordered">
                                                             <tr class="bg-primary text-white">
@@ -107,6 +108,8 @@
                                                         </table>
                                                     </div>
 
+
+                                                    <!-- Review Elements1 -->
                                                     <div class="table-responsive mt-5">
                                                         <table class="table table-bordered table-hover">
                                                             <thead class="bg-primary">
@@ -145,6 +148,7 @@
                                                         </table>
                                                     </div>
 
+                                                    <!-- Review Elements2 -->
                                                     <div class="table-responsive mt-5">
                                                         <table class="table table-bordered table-hover">
                                                             <thead class="bg-primary">
@@ -239,8 +243,9 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+
+                                                    <!-- Comment -->
                                                     <div class="form-group">
-                                                        <div class="form-group">
                                                         <label class="control-label col-sm" for="school">Comment: <span class="text-danger"> * </span> </label>
                                                         <div class="col-sm">
                                                             <textarea name="comment" class="form-control mb-3 text-left" style="resize:none; min-height: 200px;" id="comment">{{$rn->comment}}</textarea>
@@ -252,58 +257,54 @@
                                                                 });
                                                             </script>
                                                         </div>
-                                                    </div> 
+                                                    </div>
+                                                        
+                                                    <!-- Review Document -->
                                                     <div class="form-group">
-                                                        <div class="form-group">
                                                         <label class="control-label col-sm" for="school">Upload Review Document (if any):</label>
                                                         <div class="col-sm">
                                                             <input type="file" name="file" class="form-control">
                                                         </div>
                                                     </div> 
+
+                                                    <!-- Submit Button or Signature -->
                                                     @if($paper->review_status==0)
                                                     <hr />
-                                                    <div class="mb-5 text-center">
-                                                        <!-- <button name="save" value="0" class="btn btn-success btn-lg" >
-                                                        <i class="fa fa-save"></i> Save as Draft</button>
-                                                        &nbsp;&nbsp;&nbsp; -->
+                                                    <div class="form-group">
                                                         <button name="review" value="1" class="btn btn-primary btn-lg" >
                                                             <i class="fa fa-check"></i> Submit
                                                         </button>
                                                         @csrf
                                                         <input type="hidden" name="reviewId" value="{{$paper->review_id}}">
                                                     </div>
+                                                    @else
+                                                    <div class="form-group row my-5">
+                                                        <hr/>
+                                                        <div class="col-md-6">
+                                                            <h4><strong>Reviewed By </strong></h4>
+                                                            <strong>{{$paper->reviewer_name}}</strong>
+                                                            <br />
+                                                            <b>Call :</b> {{$paper->reviewer_phone}}
+                                                            <br />
+                                                            <b>E-mail :</b> {{$paper->reviewer_email}}
+                                                        </div>
+                                                        <div class="col-md-6 text-right">
+                                                            <!-- <h4>  <strong></strong></h4> -->
+                                                            <!-- <strong>  Jhon Deo Chuixae</strong> -->
+                                                            <b>Review Date :</b> {{date_format(date_create($rn->review_date),"d-M-yy")}}
+                                                        </div>
+                                                    </div>                                                    
                                                     @endif
-                                                    <hr/>
-                                               </div>
-                                            </div>
-                                            @if($paper->review_status!=0)
-                                            <div  class="row mb-5 pad-top-botm1 client-info">
 
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-5">
-                                                
-                                                    <h4><strong>Reviewed By </strong></h4>
-                                                    <strong>{{$paper->reviewer_name}}</strong>
-                                                    <br />
-                                                    <b>Call :</b> {{$paper->reviewer_phone}}
-                                                    <br />
-                                                    <b>E-mail :</b> {{$paper->reviewer_email}}
-                                                </div>
-                                                <div class="col-md-5 text-right">
-                                                    <!-- <h4>  <strong></strong></h4> -->
-                                                    <!-- <strong>  Jhon Deo Chuixae</strong> -->
-                                                    <b>Review Date :</b> {{date_format(date_create($rn->review_date),"d-M-yy")}}
-                                                </div>
-                                            </div>
-                                            @endif
-                                            @if($paper->status==1)
-                                                <div  class="row mb-5 pad-top-botm1 client-info">
-                                                    <hr />
-                                                    <div class="mb-5 text-center">
+                                                    @if($paper->status==1)
+                                                    <div class="form-group row my-5 text-center">
+                                                        <hr />
                                                         <a class="btn btn-warning" href="{{asset('reviewer/remuneration/'.$paper->review_id)}}"> <i class="fa fa-credit-card"></i> Submit Remunaration Form</a>
                                                     </div>
+                                                @endif
+                                                    
                                                 </div>
-                                            @endif
+                                            </div>                                            
                                         </form>                                         
                                     </div>
                                     <!-- /. PAGE INNER  -->
@@ -323,10 +324,13 @@
         
         @include('inc.bottom')
 
+        @if($paper->status==1)
         <script type="text/javascript">
-            $('#dataTable').dataTable( {
-              "pageLength": 5
+            $(document).ready(function(){
+                $('input').prop('disabled', true);
+                $('textarea').prop('disabled', true);
             } );
         </script>
+        @endif
     </body>
 </html>

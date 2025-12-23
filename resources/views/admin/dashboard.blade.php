@@ -15,7 +15,7 @@
                             <h1 class="page-head-line">DASHBOARD</h1>
                             <!-- <h1 class="page-subhead-line">Transcript Admin Portal</h1> -->
                         </div>
-                        <div class="col-md-8">@include('admin.include.success-error-message')</div>
+                        <div class="col-md-8">@include('inc.success-error-message')</div>
                         <div class="col-md-12" style="background: url({{ asset('public/assets/images/logo/kiit-logo-large.jpg') }}) no-repeat center;opacity: 0.2; min-height: 600px;">
                         </div>
                     </div>
